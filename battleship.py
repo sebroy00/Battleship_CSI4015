@@ -1,3 +1,5 @@
+import random
+
 def printBoard(board):
     for x in board:
         print(x)
@@ -27,7 +29,7 @@ def ship_placement_horz(board, ship_len):
             x = x + 1
         y = y + 1
     printBoard(board)
-    print(horizontal_ships)
+    return horizontal_ships
 
 
 def ship_placement_vert(board, ship_len):
@@ -51,10 +53,32 @@ def ship_placement_vert(board, ship_len):
             y = y + 1
         x = x + 1
     printBoard(board)
-    print(vertical_ships)
+    return vertical_ships
+
+def ship_placement(board, ship_len):
+    possible_horz_ships = ship_placement_horz(board, ship_len)
+    possible_vert_ships = ship_placement_vert(board, ship_len)
+
+    if len(possible_horz_ships) != 0 and len(possible_vert_ships) != 0:
+        orientation = random.randint(0,1) # 0 is vertical, 1 is horizontal
+        positions = []
+        if orientation == 0:
+            positions = possible_vert_ships[random.randint(0,len(possible_vert_ships))]
+        else:
+            positions = possible_horz_ships[random.randint(0,len(possible_horz_ships))]
+        place_ship_on_board(board, orientation, positions)
+    return board
+
+def place_ship_on_board(board, orientation, positions):
+    for a in positions[1]:
+        print(positions)
+        if orientation == 0:
+            board[positions[0]][a] = 's'
+        else:
+            board[a][positions[0]] = 's'
+    printBoard(board)
+    return board
+
 
 board = empty_board()
-for a in range(len(board)):
-    board[a][0] = 's'
-ship_placement_horz(board, 3)
-ship_placement_vert(board, 3)
+ship_placement(board, 2)

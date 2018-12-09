@@ -75,12 +75,11 @@ def ship_placement(board, ship_len):
     else:
         positions = possible_horz_ships[random.randint(0,len(possible_horz_ships)-1)]
     
-    board, ship = place_ship_on_board(board, orientation, positions)
+    board = place_ship_on_board(board, orientation, positions)
     
-    return board, ship
+    return board
 
 def place_ship_on_board(board, orientation, positions):
-    ship = []
     if orientation == 0:
         const_col = positions[0]
         ship_row = positions[1]
@@ -94,7 +93,6 @@ def place_ship_on_board(board, orientation, positions):
                     board[top_row][const_col+1] = 9
 
         for row in ship_row:
-            ship.append((row, const_col))
             board[row][const_col] = len(ship_row)
             if const_col-1 > -1:
                 board[row][const_col-1] = 9
@@ -121,7 +119,6 @@ def place_ship_on_board(board, orientation, positions):
                 board[const_row+1][left_col] = 9
 
         for col in ship_col:
-            ship.append((const_row, col))
             board[const_row][col] = len(ship_col)
             if const_row-1 > -1:
                 board[const_row-1][col] = 9
@@ -136,33 +133,29 @@ def place_ship_on_board(board, orientation, positions):
             if const_row+1 < len(board[0]):
                 board[const_row+1][right_col] = 9
 
-    return board, ship
+    return board
 
 
 def build_board():
     board = empty_board()
-    ships = []
     try: 
         for ship_len in [5,4,3,2]:
             #print('placing ship of lenght', ship_len)
-            board, ship = ship_placement(board, ship_len)
-            ships.append(ship)
+            board = ship_placement(board, ship_len)
             #printBoard(board)
     except Exception as inst:
         print(inst.args)
         print('reset')
         build_board()
-    return board, ships
+    return board
 
 def create_all_boards():
     start = time.clock()
     print('building boards')
     all_boards = []
-    all_ships = []
     for x in range(10000):
-        board, ships = build_board()
+        board = build_board()
         all_boards.append(board)
-        all_ships.append(ships)
     end = time.clock()
     print(end- start)
-    return all_boards, all_ships 
+    return all_boards 

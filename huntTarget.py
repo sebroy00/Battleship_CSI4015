@@ -4,9 +4,7 @@ import numpy as np
 import random as rnd
 import plot as plot
 
-boards = bship.create_all_boards()
-
-def solve():
+def solve(boards):
     attempts = []
     start = time.clock()
     for i in range(len(boards)):
@@ -14,8 +12,8 @@ def solve():
         if (i % 1000 == 0 and i != 0):
             elapsed = (time.clock() - start)
             print('Number of boards solved',i,'| time:', elapsed)
-    plot.distribution(attempts, 'hunt-and-target-')
-
+    return attempts
+    
 def all_coordinates(size):
     return [(i, j) for j in range(size) for i in range(size)]
 
@@ -66,5 +64,3 @@ def target(hit_row, hit_column, board, coordinates, ship_hit_counts, ship_sunk_r
                 ship_hit_counts[i] = ship_hit_counts[i] + 1 
         attempt_count_target = attempt_count_target + 1
     return attempt_count_target, board, coordinates, ship_hit_counts
-
-solve()

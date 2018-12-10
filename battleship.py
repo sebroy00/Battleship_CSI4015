@@ -1,5 +1,8 @@
 import random
 import time
+import randomSelection
+import huntTarget
+import plot
 
 def printBoard(board):
     for x in board:
@@ -153,9 +156,18 @@ def create_all_boards():
     start = time.clock()
     print('building boards')
     all_boards = []
-    for x in range(10000):
+    for x in range(10001):
         board = build_board()
         all_boards.append(board)
     end = time.clock()
     print(end- start)
     return all_boards 
+
+
+boards = create_all_boards()
+result1 = huntTarget.solve(boards)
+result2 = randomSelection.solve(boards)
+results = [result1, result2]
+group_labels = ['hunt-target', 'random-selection']
+colors = ['#3A4750', '#F64E8B']
+plot.distribution(results, group_labels, colors)

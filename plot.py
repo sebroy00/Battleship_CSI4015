@@ -10,20 +10,13 @@ import matplotlib.mlab as mlab
 
 import numpy as np
 
-def distribution(values, algo):
-    
-    trace1 = go.Histogram(
-        x=values,
-        opacity=0.75
-    )
-    #trace2 = go.Histogram(
-    #    x=x1,
-    #    opacity=0.75
-    #)
-    data = [trace1]
-    layout = go.Layout(barmode='overlay')
-    fig = go.Figure(data=data, layout=layout)
-    plotly.offline.plot(fig, filename=algo+str(time.time())+'.html')
+def distribution(data, group_labels, colors):
+    hist_data = data
+    # Create distplot with curve_type set to 'normal'
+    fig = ff.create_distplot(hist_data, group_labels, show_hist=False, curve_type='normal', colors=colors)
+    fig['layout'].update(title='Battleship Algorithms: Distplot with Normal Distribution')
+
+    plotly.offline.plot(fig, filename='battleship-algos-'+str(time.time())+'.html')
 
 
 def distribution2(values, algo):

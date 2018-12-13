@@ -3,6 +3,7 @@ import numpy as np
 import random as rnd
 
 def solve(boards):
+    print('Starting Random Selection')
     attempts = []
     start = time.clock()
     for i in range(len(boards)):

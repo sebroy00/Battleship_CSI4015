@@ -27,25 +27,27 @@ def get_best_odd_coord(coordinates, ship_hit_counts):
     for (row, column) in coordinates:
         player_board[row][column] = 0
 
-    ship_placements_horz = []
-    ship_placements_vert = []
+    horz = []
+    vert = []
     for i in [0,1,2,3]:
         if ship_hit_counts[i] < 2+i:
-            ship_placements_horz += bship.ship_placement_horz(player_board, 2+i)
-            ship_placements_vert += bship.ship_placement_vert(player_board, 2+i)
+            horz += bship.ship_placement_horz(player_board, 2+i)
+            vert += bship.ship_placement_vert(player_board, 2+i)
+
+    possible_ship_plassements = horz + vert
+    # print(possible_ship_plassements)
+    # print()
 
     odds_board = bship.empty_board()
-    for horz in ship_placements_horz:
-        row = horz[0]
-        for col in horz[1]:
-            odds_board[row][col] = odds_board[row][col]+1 #increase odds count for each placement
-
-    for vert in ship_placements_vert:
-        col = vert[0]
-        for row in vert[1]:
-            odds_board[row][col] = odds_board[row][col]+1 #increase odds count for each placement
+    
+    for ship in possible_ship_plassements:
+        for ship_pos in ship:
+            row = ship_pos[0]
+            col = ship_pos[1]
+            odds_board[row][col] = odds_board[row][col]+1 # increase odds count for each placement
 
     #bship.printBoard(odds_board)
+    #print()
 
     # get the coordinates of the maximum 
     max_odd = 0

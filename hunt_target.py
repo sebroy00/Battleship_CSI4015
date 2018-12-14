@@ -1,8 +1,10 @@
 import time
-import numpy as np
 import random as rnd
-import plot as plot
 
+import numpy as np
+
+# project files
+import plot as plot
 import battleship as bship
 
 def solve(boards, with_parity=False, best_odds=False):

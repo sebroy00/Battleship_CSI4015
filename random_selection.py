@@ -1,6 +1,7 @@
 import time
-import numpy as np
 import random as rnd
+
+import numpy as np
 
 def solve(boards):
     print('Starting Random Selection')

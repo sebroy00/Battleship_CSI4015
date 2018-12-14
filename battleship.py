@@ -1,8 +1,10 @@
-import random
 import time
+import random as rnd
+
+# project files
+import plot
 import random_selection
 import hunt_target
-import plot
 
 def printBoard(board):
     for x in board:
@@ -67,7 +69,7 @@ def ship_placement(board, ship_len):
     if len(possible_ship_placements) == 0:
         raise Exception('impossible to add ship', ship_len)
     
-    ship_index = random.randint(0,len(possible_ship_placements)-1)
+    ship_index = rnd.randint(0,len(possible_ship_placements)-1)
     if len(horz)-1 < ship_index:
         orientation = 0 # horizontal orientation
     else:

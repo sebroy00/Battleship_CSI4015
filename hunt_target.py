@@ -73,6 +73,11 @@ def chose_next_coord(coordinates, with_parity=False, best_odds=False, ship_hit_c
         chosen_coord = rnd.randrange(0, len(coordinates), 2)
     return chosen_coord
 
+def new_ship_sunk(ship_type, ship_hit_counts, ship_sunk_required):
+    if ship_hit_counts[ship_type-2] == ship_sunk_required[ship_type-2]:
+        return True
+    return False
+
 def hunt(board, with_parity=False, best_odds=False):
     coordinates = all_coordinates(len(board))
     ship_sunk_required = [2,3,4,5]
@@ -90,18 +95,22 @@ def hunt(board, with_parity=False, best_odds=False):
         coordinates.remove(coordinates[chosen_coord])
         for i in [0,1,2,3]:
             if board[row][column] == (2+i):
+                ship_hit_counts[i] = ship_hit_counts[i]+1
                 attempt_count_target, board, coordinates, ship_hit_counts = target(row, column, board, coordinates, ship_hit_counts, ship_sunk_required)
                 attempt_count += attempt_count_target
-                ship_hit_counts[i] = ship_hit_counts[i]+1 
         attempt_count = attempt_count+1
     return attempt_count
 
 def target(hit_row, hit_column, board, coordinates, ship_hit_counts, ship_sunk_required):
+    ship_type = board[hit_row][hit_column]
+
     left = (hit_row-1, hit_column)
     right = (hit_row+1, hit_column)
     top = (hit_row, hit_column+1)
     bottom = (hit_row, hit_column-1)
 
+    # add all surrounding coordinates to the targets stack
+    # if they haven't already been visited
     targets = []
     if left in coordinates:
         coordinates.remove(left)
@@ -117,12 +126,16 @@ def target(hit_row, hit_column, board, coordinates, ship_hit_counts, ship_sunk_r
         targets.append(bottom)
     
     attempt_count_target = 0
-    while len(targets) > 0 and not np.array_equal(ship_hit_counts, ship_sunk_required) and len(coordinates) > 0:
+    # while not all ships are 'sunk' 
+    # and we still have coordinates to visit
+    # and we don't have new targets to visit
+    while len(targets) > 0 and not new_ship_sunk(ship_type, ship_hit_counts, ship_sunk_required) and len(coordinates) > 0:
         (row, column)= targets.pop()
         for i in [0,1,2,3]:
             if board[row][column] == (2 + i):
+                ship_hit_counts[i] = ship_hit_counts[i] + 1 
+                # recursively call the targetting algorithm
                 attempt_count_target2, board, coordinates, ship_hit_counts = target(row, column, board, coordinates, ship_hit_counts, ship_sunk_required)
                 attempt_count_target += attempt_count_target2
-                ship_hit_counts[i] = ship_hit_counts[i] + 1 
         attempt_count_target = attempt_count_target + 1
     return attempt_count_target, board, coordinates, ship_hit_counts

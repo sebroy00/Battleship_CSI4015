@@ -61,21 +61,28 @@ def ship_placement_vert(board, ship_len):
     return vertical_ships
 
 def ship_placement(board, ship_len):
+    # get all possible placements for that ship length in a list
     horz = ship_placement_horz(board, ship_len)
     vert = ship_placement_vert(board, ship_len)
-    
     possible_ship_placements = horz + vert
     
+    # if there is not possible way of placing a ship on the board
     if len(possible_ship_placements) == 0:
         raise Exception('impossible to add ship', ship_len)
     
+    # select a random index from the list of possible placements on the board
     ship_index = rnd.randint(0,len(possible_ship_placements)-1)
     if len(horz)-1 < ship_index:
         orientation = 0 # horizontal orientation
     else:
         orientation = 1 # vertical orientation
+    
+    # get the ship coordinates
     ship = possible_ship_placements[ship_index]
 
+    # place the ship on our board
+    # this also adds constraints to all surrounding squares
+    # around the ship, to make sure we don't place one thereafter
     board = place_ship_on_board(board, ship, orientation)
     return board
 

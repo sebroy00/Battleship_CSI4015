@@ -10,7 +10,7 @@ def printBoard(board):
     print
 
 def empty_board():
-    size = 10 # default
+    size = 8
     return [[0 for x in range(size)] for y in range(size)] 
 
 def ship_placement_horz(board, ship_len):
@@ -156,7 +156,7 @@ def create_all_boards():
     start = time.clock()
     print('building boards')
     all_boards = []
-    for x in range(10001):
+    for x in range(100001):
         board = build_board()
         all_boards.append(board)
     end = time.clock()

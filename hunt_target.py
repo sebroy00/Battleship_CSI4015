@@ -6,7 +6,7 @@ import plot as plot
 import battleship as bship
 
 def solve(boards, with_parity=False, best_odds=False):
-    print('Starting Hunt/Target with parity=', with_parity)
+    print('Starting Hunt/Target with parity =', with_parity,'& best_odds =', best_odds)
     attempts = []
     start = time.clock()
     for i in range(len(boards)):
@@ -74,13 +74,13 @@ def hunt(board, with_parity=False, best_odds=False):
     ship_sunk_required = [2,3,4,5]
     ship_hit_counts = [0,0,0,0] # 2,3,4,5
     attempt_count = 0 # number of selections made by player
-    print()
-    print('current board:')
-    bship.printBoard(board)
-    print()
+    #print()
+    #print('current board:')
+    #bship.printBoard(board)
+    #print()
     while not np.array_equal(ship_hit_counts, ship_sunk_required) and len(coordinates) > 0:
-        print('hit counts', ship_hit_counts)
-        print()
+        #print('hit counts', ship_hit_counts)
+        #print()
         chosen_coord = chose_next_coord(coordinates, with_parity, best_odds, ship_hit_counts)
         (row, column) = coordinates[chosen_coord]
         coordinates.remove(coordinates[chosen_coord])

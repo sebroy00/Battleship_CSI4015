@@ -16,6 +16,9 @@ def solve(boards, with_parity=False, best_odds=False):
         if (i % 1000 == 0 and i != 0):
             elapsed = (time.clock() - start)
             print('Number of boards solved',i,'| time:', elapsed)
+            if with_parity:
+                global timeout_count
+                print('timeouts total:', timeout_count)
     return attempts
     
 def all_coordinates(size):
@@ -65,12 +68,19 @@ def get_best_odd_coord(coordinates, ship_hit_counts):
     #print(max_odd)
     return coordinates.index((selected_coord))
 
+timeout_count = 0
 def chose_next_coord(coordinates, with_parity=False, best_odds=False, ship_hit_counts=None):
     if best_odds:
         return get_best_odd_coord(coordinates, ship_hit_counts)
-    chosen_coord = rnd.randint(0, len(coordinates)-1)
-    if with_parity and chosen_coord % 2 == 0:
-        chosen_coord = rnd.randrange(0, len(coordinates), 2)
+    chosen_coord = rnd.randrange(0, len(coordinates)-1)
+    if with_parity:
+        timeout = 0
+        while (coordinates[chosen_coord][0] + coordinates[chosen_coord][1]) % 2 == 0 and (timeout != len(coordinates)*100):
+            chosen_coord = rnd.randrange(0, len(coordinates)-1)
+            timeout = timeout + 1
+        if timeout == len(coordinates)*100:
+            global timeout_count
+            timeout_count = timeout_count + 1
     return chosen_coord
 
 def new_ship_sunk(ship_type, ship_hit_counts, ship_sunk_required):
@@ -92,7 +102,7 @@ def hunt(board, with_parity=False, best_odds=False):
         #print()
         chosen_coord = chose_next_coord(coordinates, with_parity, best_odds, ship_hit_counts)
         (row, column) = coordinates[chosen_coord]
-        coordinates.remove(coordinates[chosen_coord])
+        coordinates.remove((row, column))
         for i in [0,1,2,3]:
             if board[row][column] == (2+i):
                 ship_hit_counts[i] = ship_hit_counts[i]+1
